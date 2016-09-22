@@ -3,20 +3,21 @@ package hackerRank;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-public class PrimsSpecialSubtree {
+import lib.BinaryMinHeap;
+import lib.Edge;
+import lib.Node;
 
-	Node source;
-	
-	Map<Integer,Node> map = new HashMap<>();
-	List<Edge> mst;
+public class PrimsSpecialSubtree {
+		
+	Map<Integer,Node> map = new HashMap<>();	
+	private static int S;
 	
 	public static void main(String[] args) {
 		FastInput fi = new FastInput();
@@ -24,116 +25,78 @@ public class PrimsSpecialSubtree {
 		fi.nextInt();
 		int M = fi.nextInt();
 		
-		while(M -->0){
-			int x = fi.nextInt();
-			int y = fi.nextInt();
+		for(int m=1;m<=M;m++){
+			int x = fi.nextInt()-1;
+			int y = fi.nextInt()-1;
 			int w = fi.nextInt();
 			
 			Node s = pss.map.get(x);
 			if(s==null)
-				s=new Node(x);
+				s=new Node(x,Integer.MAX_VALUE);
 							
 			Node t = pss.map.get(y);
 			if(t==null)
-				t=new Node(y);
+				t=new Node(y,Integer.MAX_VALUE);
 			
-			s.edges.put(y, new Edge(t, w));
-			t.edges.put(x, new Edge(s,w));
+			s.adjEdges.put(y, new Edge(x,y, w));
+			t.adjEdges.put(x, new Edge(y,x,w));
 			
 			s.adjNodes.put(y, t);
 			t.adjNodes.put(x, s);
 			
 			pss.map.put(x, s);
 			pss.map.put(y, t);			
-		}
+		}		
+		S =fi.nextInt()-1;			
 		
-		int s =fi.nextInt();
-		pss.source = pss.map.get(s);
-		pss.source.currentMinDistance = 0;
-		
-		pss.mst = pss.getMST();
 		pss.printWeightSum();
 		
 	}	
 	
 	private List<Edge> getMST() {
-		List<Edge> result = new ArrayList<>();
+		List<Edge> result = new ArrayList<>();		
 		
-		PriorityQueue<Node> q = new PriorityQueue<>(new Comparator<Node>() {
-			@Override
-			public int compare(Node o1, Node o2) {
-				if(o2.currentMinDistance<o1.currentMinDistance)
-					return 1;
-				else
-					return -1;
-			}
-		});
+		BinaryMinHeap minHeap = new BinaryMinHeap();
+		Map<Integer,Edge> nodeToEdge = new HashMap<>();
 		
 		for(Node n:map.values())
-			q.add(n);
+			minHeap.add(n);		
 		
+		minHeap.decrease(S, 0);
 		
-		Map<Node,Edge> nodeToEdge = new HashMap<>();
-		
-		while(!q.isEmpty()){
-			Node node = q.remove();
-			Edge e = nodeToEdge.get(node);
-			if(e!=null)
-				result.add(e);
+		while(!minHeap.isEmpty()){
+			Node min = minHeap.extractMin();
 			
-			for(Node adjNode : node.adjNodes.values()){
-				int w = node.currentMinDistance+node.edges.get(adjNode.index).weight;
-				if(q.contains(adjNode) && adjNode.currentMinDistance>node.currentMinDistance+w){
-					q.remove(adjNode);
-					adjNode.currentMinDistance = node.currentMinDistance+w;
-					q.add(adjNode);
-					
-					nodeToEdge.put(adjNode,node.edges.get(adjNode.index));
+			
+			if(nodeToEdge.containsKey(min.index))
+				result.add(nodeToEdge.get(min.index));
+			
+			for(Node adjNode : min.adjNodes.values()){
+				if(!minHeap.contains(adjNode))
+					continue;
+				
+				Edge edgeToAdjNode = min.adjEdges.get(adjNode.index);
+				if(adjNode.data>edgeToAdjNode.w){
+					minHeap.decrease(minHeap.nodePosition.get(adjNode), min.adjEdges.get(adjNode.index).w);
+					nodeToEdge.put(adjNode.index,  min.adjEdges.get(adjNode.index));
 				}
 			}
-			
-		}
-		
+		}				
 		
 		return result;
 	}
 
+	
+	
 	private void printWeightSum() {		
 		int sum = 0;
-		for(Edge e:mst)
-			sum += e.weight;
+		for(Edge e:getMST())
+			sum += e.w;
 		
 		System.out.print(sum);
 			
-	}
-
-	static class Node{
-		int index;
-		Node parent;
-		Map<Integer,Edge> edges;
-		Map<Integer,Node> adjNodes;
-		
-		int currentMinDistance;
-		
-		public Node(int index) {
-			super();
-			this.index = index;
-			edges = new HashMap<>();
-			adjNodes = new HashMap<>();
-			currentMinDistance = Integer.MAX_VALUE;
-		}
-		
-	}
+	}	
 	
-	static class Edge{
-		public Edge(Node terminal, int weight) {
-			super();
-			this.terminal = terminal;
-			this.weight = weight;
-		}
-		Node terminal;
-		int weight;
-	}
 	
 	static class FastInput{
 		BufferedReader br;

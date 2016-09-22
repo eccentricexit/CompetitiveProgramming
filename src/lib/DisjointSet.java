@@ -3,61 +3,83 @@ package lib;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class DisjointSet {
 	
-	Map<Long,Node> map = new HashMap<>();
+	Map<Integer,Node> map = new HashMap<>();
 	
-	class Node{
-		Node parent;
-		long data;
-		int rank;
-		
-		public Node(long data){
-			this.data = data;
-			parent = this;
-			rank = 0;
-		}
+	public void makeSet(Node node){
+		Node n = new Node(node.index);
+		n.rank = 0;
+		n.parent = n.index;
+		map.put(n.index, n);
 	}
 	
-	public void makeSet(long data){
-		 Node node = new Node(data);
-		 map.put(data, node);		 
-	}
+	public void union(int index1, int index2){		
+		if(findSet(index1) == findSet(index2))
+			return;		
 	
-	public void union(long data1, long data2){
-		Node node1 = map.get(data1);
-		Node node2 = map.get(data2);
+		Node root1 = map.get(findSet(index1));
+		Node root2 = map.get(findSet(index2));
 		
-		Node parent1 = findSet(node1);
-		Node parent2 = findSet(node2);
-				
-		//are already in the same set
-		if(parent1.data == parent2.data)
-			return;
-		
-		if(parent1.rank>=parent2.data){
-			parent1.rank = (parent1.rank==parent2.rank)?
-					parent1.rank + 1: parent1.rank;
-			
-			parent2.parent = parent1;			
+		if(root1.rank>=root2.rank){
+			root2.parent = root1.parent;
+			if(root1.rank == root2.rank)
+				root1.rank++;
 		}else{
-			parent1.parent = parent2;
-		}		
-	}
-	
-	public long findSet(long data){
-		return findSet(map.get(data)).data;
-	}
-
-	private Node findSet(Node node) {
-		if(node.parent == node)
-			return node;	
+			root1.parent = root2.parent;			
+		}
 		
-		node.parent = findSet(node.parent);
-		return node.parent;
 	}
 	
+	public int findSet(int index){
+		Node n = map.get(index);
+		if(n.parent == n.index)
+			return n.index;
+		
+		n.parent = findSet(n.parent);
+		return n.parent;
+	}
 	
+	public static void main(String[] args) {
+		DisjointSet ds = new DisjointSet();
+        ds.makeSet(new Node(1));
+        ds.makeSet(new Node(2));
+        ds.makeSet(new Node(3));
+        ds.makeSet(new Node(4));
+        ds.makeSet(new Node(5));
+        ds.makeSet(new Node(6));
+        ds.makeSet(new Node(7));
+
+        ds.union(1, 2);
+        System.out.println(ds.findSet(2));
+        ds.union(2, 3);
+        System.out.println(ds.findSet(3));
+        ds.union(4, 5);
+        System.out.println(ds.findSet(4));
+        ds.union(6, 7);
+        System.out.println(ds.findSet(6));
+        ds.union(5, 6);
+        System.out.println(ds.findSet(7));
+        ds.union(3, 7);
+        System.out.println(ds.findSet(7));
+        
+        
+        
+        
+        
+        
+        
+	}
+	
+	public static class Node extends lib.Node{
+
+		public Node(int index) {
+			super(index);			
+		}
+		
+		int rank;
+		int parent;
+		
+	}
 
 }
