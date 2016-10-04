@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.InputMismatchException;
 
-class InputReader {
+public class InputReader {
 	 
 	private InputStream stream;
 	private byte[] buf = new byte[1024];

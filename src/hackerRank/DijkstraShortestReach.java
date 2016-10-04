@@ -111,7 +111,7 @@ public class DijkstraShortestReach {
 		
 	}
 
-	static class FastReader{		
+	private static class FastReader{		
 		BufferedReader br;
 		StringTokenizer st;
 		
@@ -136,20 +136,6 @@ public class DijkstraShortestReach {
 		int nextInt(){
 			return Integer.parseInt(next());
 		}
-		
-		String nextLine()
-        {
-            String str = "";
-            try
-            {
-                str = br.readLine();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-            return str;
-        }
 	}
 	
 	static class Node{
