@@ -98,7 +98,7 @@ public class PrimsSpecialSubtree {
 	}	
 	
 	
-	static class FastInput{
+	private static class FastInput{
 		BufferedReader br;
 		StringTokenizer st;
 		

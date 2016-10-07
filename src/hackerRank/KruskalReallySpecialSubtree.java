@@ -129,7 +129,7 @@ public class KruskalReallySpecialSubtree {
 		return result;
 	}
 
-	static class FastInput{
+	private static class FastInput{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer str;		
 		

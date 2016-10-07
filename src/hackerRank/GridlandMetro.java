@@ -101,6 +101,7 @@ public class GridlandMetro {
 			length = c2-c1+1;
 			overlaped = new boolean[length];
 		}
+		@SuppressWarnings("unused")
 		public void updateCollided(Track track) {
 			int c1_a = c1;
 			int c2_a = c2;
@@ -133,6 +134,7 @@ public class GridlandMetro {
 				return true;
 		}
 		
+		@SuppressWarnings("unused")
 		int r;
 		int c1;
 		int c2;
