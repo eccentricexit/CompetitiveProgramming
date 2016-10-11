@@ -18,9 +18,7 @@ public class CheckBST {
 		
 		map.get(2).right = new Node(4);
 		
-		printTreeBFS();
-		
-		
+		printTreeBFS();		
 		
 		System.out.println(isBST(root,Integer.MIN_VALUE));
 
