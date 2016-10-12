@@ -1,3 +1,6 @@
+/*******************************************************************************
+ * Author: Matheus Faria de Alencar
+ *******************************************************************************/
 package geeksForGeeks;
 
 import java.util.HashMap;
@@ -88,7 +91,7 @@ public class CheckBST {
 		q.add(null);		
 
 		if(q.peek()==null){
-			System.out.println("Árvore vazia.");
+			System.out.println("ï¿½rvore vazia.");
 			return;
 		}				
 

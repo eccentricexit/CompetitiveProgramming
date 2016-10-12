@@ -1,3 +1,6 @@
+/*******************************************************************************
+ * Author: Matheus Faria de Alencar
+ *******************************************************************************/
 package lib;
 
 import java.util.Set;
@@ -28,6 +31,11 @@ public class Tools {
 
 	public static void printCollection(Set<Integer> patternIndexes) {
 		printArray(patternIndexes.toArray());		
+	}
+
+	public static void printArray(int[] arr) {
+		for(Integer element:arr)
+			System.out.print(element+" ");		
 	}
 
 }
