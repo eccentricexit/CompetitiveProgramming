@@ -32,4 +32,12 @@ public class FastIO {
 	public int nextInt(){
 		return Integer.parseInt(next());
 	}
+
+	public void close() {
+		try {
+			br.close();
+		} catch (IOException e) {			
+			e.printStackTrace();
+		}		
+	}
 }
